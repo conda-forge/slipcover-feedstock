@@ -6,7 +6,7 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/slipcover-{{ version }}.tar.gz
+  - url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/slipcover-{{ version }}.tar.gz
     sha256: 80433ab2ccc9d2cda69f3c5adca4d978c34f13efb551c36e32657598b8c207be
   # missing file from 0.2.0 sdist required for build
   # fixed in:
@@ -17,11 +17,12 @@ source:
 
 build:
   script: {{ PYTHON }} -m pip install . -vv
-  number: 1
+  number: 2
 
 requirements:
   build:
     - {{ compiler('cxx') }}
+    - {{ stdlib("c") }}
   host:
     - pip
     - python
