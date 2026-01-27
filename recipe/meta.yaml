@@ -1,31 +1,28 @@
 {% set name = "slipcover" %}
-{% set version = "0.2.0" %}
+{% set version = "1.0.17" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  - url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/slipcover-{{ version }}.tar.gz
-    sha256: 80433ab2ccc9d2cda69f3c5adca4d978c34f13efb551c36e32657598b8c207be
-  # missing file from 0.2.0 sdist required for build
-  # fixed in:
-  # https://github.com/plasma-umass/slipcover/pull/31
-  - path: pyptr.h
-  - patches:
-    - 0001-use-env-build-flags.patch
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/slipcover-{{ version }}.tar.gz
+  sha256: c94fb8f587e010773b0977e19aaca03767200d44a17ad48424638e93022582ca
 
 build:
   script: {{ PYTHON }} -m pip install . -vv
-  number: 1
+  number: 0
 
 requirements:
   build:
-    - {{ compiler('cxx') }}
+    # C++ compiler only needed for Python < 3.12
+    - {{ compiler('cxx') }}  # [py < 312]
   host:
     - pip
     - python
-    - setuptools
+    - setuptools >61
+    - wheel
+    - tomli  # [py < 311]
   run:
     - python
     - tabulate
@@ -36,15 +33,24 @@ test:
     - slipcover.slipcover
   commands:
     - pip check
+    - slipcover --help
   requires:
     - pip
 
 about:
   home: https://github.com/plasma-umass/slipcover
   summary: Near Zero-Overhead Python Code Coverage
+  description: |
+    SlipCover is a fast code coverage tool. It uses runtime instrumentation
+    to track executed code with near-zero overhead, making it ideal for use
+    with test suites. For Python 3.12+, it uses the sys.monitoring API;
+    for earlier versions, it uses bytecode instrumentation.
   license: Apache-2.0
   license_file: LICENSE
+  dev_url: https://github.com/plasma-umass/slipcover
+  doc_url: https://github.com/plasma-umass/slipcover#readme
 
 extra:
   recipe-maintainers:
     - asford
+    - emeryberger
