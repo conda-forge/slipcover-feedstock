@@ -34,7 +34,7 @@ test:
     - slipcover.slipcover
   commands:
     - pip check
-    - slipcover --help
+    - slipcover --help  # [not win]
   requires:
     - pip
 
