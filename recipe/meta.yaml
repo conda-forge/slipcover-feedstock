@@ -1,5 +1,5 @@
 {% set name = "slipcover" %}
-{% set version = "1.0.17" %}
+{% set version = "1.0.18" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/slipcover-{{ version }}.tar.gz
-  sha256: c94fb8f587e010773b0977e19aaca03767200d44a17ad48424638e93022582ca
+  sha256: 7b48458539444ccd6d75fe87228570825778e686f280752e59976be140ec4f26
 
 build:
   script: {{ PYTHON }} -m pip install . -vv
@@ -18,6 +18,7 @@ requirements:
     # C++ compiler and stdlib only needed for Python < 3.12
     - {{ stdlib("c") }}  # [py < 312]
     - {{ compiler('cxx') }}  # [py < 312]
+    - {{ stdlib("c") }}    # [py < 312]
   host:
     - pip
     - python
